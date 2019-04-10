@@ -1,3 +1,32 @@
+## V 5.5.1
+- FIX: key expression for new json format
+- IMPROVEMENT: forcing a rerender when resize is called in canvas
+- ACCESSIBILITY: added title, description and aria label for text layers for svg renderer
+
+## V 5.5.0
+- IMPROVEMENT: JSON filesize reduction. Around 25 to 33% filesize reduction with this new version.
+- FEATURE: Bodymovin panel with new advanced settings to reduce filesize.
+- FIX: honor `forceFlag` when calling `playSegments` (thanks @mrmos)
+- FIX: added source-over as default blending mode for canvas renderer resetting
+- FIX: fixed bezier easing property validation
+- FIX: fixed property caching by index instead of bezier data
+- FIX: added thisProperty expression value
+
+## V 5.4.4
+- FIX: viewport meta tag on android with mask fix
+- FIX: fixed enterFrame direction property
+- FIX: explicitly iterating math methods
+- FIX: added missing expression properties
+- FIX: setting class attribute via setAttribute
+- FIX: added value property in key method expression
+- FIX: text animator expression fix
+- FIX: added smooth expression support
+- FIX: hcamera expression fix
+- FIX: fix animated dash property canvas
+- NEW: sourceRectAtTime for images fix
+- NEW: Advanced option in Bodymovin extension to skip expression properties
+- NEW: removed some unused json properties
+
 ## V 5.4.3
 - NEW: added blend mode support for shapes in svg renderer
 - NEW: removed random ids in favour of incremental ids

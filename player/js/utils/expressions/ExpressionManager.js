@@ -26,6 +26,9 @@ var ExpressionManager = (function(){
             }
             return retArr;
         }
+        if (a.propType) {
+            return a.v;
+        }
     }
 
     var easeInBez = BezierFactory.getBezierEasing(0.333,0,.833,.833, 'easeIn').get;
@@ -170,6 +173,11 @@ var ExpressionManager = (function(){
         }
         return a % b;
     }
+    var $bm_sum = sum;
+    var $bm_sub = sub;
+    var $bm_mul = mul;
+    var $bm_div = div;
+    var $bm_mod = mod;
 
     function clamp(num, min, max) {
         if(min > max){
@@ -341,6 +349,11 @@ var ExpressionManager = (function(){
         var transform,$bm_transform,content,effect;
         var thisProperty = property;
         thisProperty.valueAtTime = thisProperty.getValueAtTime;
+        Object.defineProperty(thisProperty, 'value', {
+            get: function() {
+                return thisProperty.v
+            }
+        })
         elem.comp.frameDuration = 1/elem.comp.globalData.frameRate;
         elem.comp.displayStartTime = 0;
         var inPoint = elem.data.ip/elem.comp.globalData.frameRate;
@@ -348,7 +361,7 @@ var ExpressionManager = (function(){
         var width = elem.data.sw ? elem.data.sw : 0;
         var height = elem.data.sh ? elem.data.sh : 0;
         var name = elem.data.nm;
-        var loopIn, loop_in, loopOut, loop_out;
+        var loopIn, loop_in, loopOut, loop_out, smooth;
         var toWorld,fromWorld,fromComp,toComp,fromCompToSurface, position, rotation, anchorPoint, scale, thisLayer,thisComp,mask,valueAtTime,velocityAtTime;
         var __expression_functions = [];
         if(data.xf) {
@@ -403,6 +416,10 @@ var ExpressionManager = (function(){
         if(thisProperty.loopOut) {
             loopOut = thisProperty.loopOut.bind(thisProperty);
             loop_out = loopOut;
+        }
+
+        if(thisProperty.smooth) {
+            smooth = thisProperty.smooth.bind(thisProperty);
         }
 
         function loopInDuration(type,duration){
@@ -511,17 +528,19 @@ var ExpressionManager = (function(){
             }
             ind -= 1;
             ob = {
-                time: data.k[ind].t/elem.comp.globalData.frameRate
+                time: data.k[ind].t/elem.comp.globalData.frameRate,
+                value: []
             };
             var arr;
             if(ind === data.k.length - 1 && !data.k[ind].h){
-                arr = data.k[ind-1].e;
+                arr = (data.k[ind].s || data.k[ind].s === 0) ? data.k[ind-1].s : data.k[ind].e;
             }else{
                 arr = data.k[ind].s;
             }
             len = arr.length;
             for(i=0;i<len;i+=1){
                 ob[i] = arr[i];
+                ob.value[i] = arr[i]
             }
             return ob;
         }
